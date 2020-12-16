@@ -49,9 +49,15 @@
             $('.more-btn').click(function(e){
                 e.preventDefault();
                 $('.menu .menu-service-box.box1').toggle();
+                //더보기 버튼 클릭
                 if(!$(this).hasClass('fold')){
                     $(this).text('접기')
-                }else{
+                    tmpMenuArr = selectdMenuArr.slice(0);
+                    setEmptyMenu(selectdMenuArr);
+                    setMenuCheckbox(selectdMenuArr);
+                }
+                //접기 버튼 클릭
+                else{
                     $(this).text('더보기')
                     foldBtn();
                 }
@@ -65,7 +71,117 @@
                 $('.black-menu-box').hide();
                 $('.empty-box').show();
             })
+            //메뉴설정에서 메뉴를 선택
+            $('.service-data input').change(function(){
+                var text = $(this).parent().text().trim();
+                /* 선택된 메뉴가 배열에 있으면 배열에서 제거, 없으면 추가 */
+                var index = tmpMenuArr.indexOf(text);
+                if( index == -1){
+                    if(tmpMenuArr.length != 5){
+                        tmpMenuArr.push(text);
+                        $('.empty-menu.focus').text(text);
+                        $('.empty-menu.focus').addClass('selected');
+                        $('.empty-menu.focus').removeClass('focus');
+                        $('.empty-menu.selected').last().next().addClass('focus');   
+                    }else{
+                        alert('최대 5개까지 설정할 수 있습니다.')
+                        $(this).prop('checked',false);
+                    }
+                }else{
+                    tmpMenuArr.splice(index,1);
+                    setEmptyMenu(tmpMenuArr);   
+                }
+            })
+            //저장 버튼 클릭
+            $('.btn-box .save-btn').click(function(e){
+                e.preventDefault();
+                    //tmpMenuArr=>selectdMenuArr
+                    console.log(tmpMenuArr)
+                    selectdMenuArr = tmpMenuArr.splice(0);
+                    if(selectdMenuArr.length == 0){
+                        alert('선택된 메뉴가 없습니다. 초기설정으로 돌아갑니다.')
+                    }
+                    //selectdMenuArr있는 내용을 토대로 block-menu-box내용 추가
+                    $('.more-btn').click();
+                    setBlackMenu(selectdMenuArr, baseMenuArr);
+
+            })
+            //초기화 버튼 클릭
+            $('.btn-box .init-btn').click(function(e){
+                e.preventDefault();
+                alert('초기설정으로 돌아갑니다.')
+                selectdMenuArr = [];
+                $('.more-btn').click();
+                setBlackMenu(selectdMenuArr, baseMenuArr);
+            })
+            //검색어 필터 설정이 필요합니다 클릭
+            $('.filt-box').click(function(e){
+                e.preventDefault();
+                $('.flit-search-box').show();
+            })
+            // X버튼을 클릭하면
+            $('.flit-search-box .close-btn').click(function(e){
+                e.preventDefault();
+                $('.flit-search-box').hide();
+            })
         });
+        var selectdMenuArr = [];        // 메뉴설정에서 메뉴들을 선택하고 저장했을 때 최종 결정된 메뉴
+        var tmpMenuArr = [];            // 메뉴설정에서 메뉴들을 선택했을 때 저장된 메뉴
+        const baseMenuArr = ['사전','뉴스','증권','부동산','영화','VIBE','책','웹툰'];
+        const MenuLink = {
+            '사전' : 'https://dict.naver.com/',
+            '뉴스' : 'https://news.naver.com/',
+            '증권'  : 'https://finance.naver.com/',
+            '부동산' : '#1',
+            '영화' : '#2',
+            'VIBE' : '#3',
+            '책' : '#4',
+            '웹툰' : '#5'
+        };
+        function setMenuCheckbox(arr) {
+            $('.service-data input').each(function(){
+                var text = $(this).parent().text().trim();
+                if(arr.indexOf(text) != -1){
+                    $(this).prop('checked',true);
+                }else{
+                    $(this).prop('checked',false);
+                }
+            })
+        }
+     
+        function setEmptyMenu(arr){
+            $('.empty-menu').removeClass('focus');
+            $('.empty-menu').removeClass('selected');
+            $('.empty-menu').each(function(i){
+                if(i < arr.length){
+                    $(this).addClass('selected');
+                    $(this).text(arr[i]);
+                }else{
+                    $(this).text('');
+                    if(i == arr.length){
+                        $(this).addClass('focus');
+                    }
+                }
+            })         
+        }
+        function setBlackMenu(arr1, arr2){
+            var arr;
+            //선택된 메뉴가 없으면 ==> 사용자 설정 메뉴가 없으면
+            if(arr1.length == 0){
+                //기본 메뉴를 기준
+                arr = arr2;
+            }else{
+                //선택된 메뉴를 기준
+                arr = arr1;
+            }
+            str = '';
+            for(var i = 0; i<arr.length; i++){
+                str += '<li class="black-menu">'
+                    +  '<a href=" '+ MenuLink[arr[i]] +' " class="link">' + arr[i] + '</a>'
+                    +  '</li>';
+            }
+            $('.black-menu-box').html(str);
+        }
         function getpage(page,min,max){
             if(page < min)  return max;
             if(page > max)  return min;
@@ -162,7 +278,7 @@
             <ul class="black-menu-box">
                 <li class="black-menu">
                     <a href="#" class="link">
-                        블로그
+                        사전
                     </a>
                 </li>
                 <li class="black-menu">
@@ -207,7 +323,7 @@
                 </li>
             </ul>
             <ul class="empty-box">
-                <li class="empty-menu"></li>
+                <li class="empty-menu focus"></li>
                 <li class="empty-menu"></li>
                 <li class="empty-menu"></li>
                 <li class="empty-menu"></li>
@@ -219,6 +335,12 @@
                     <i class="error-ico"></i>
                     <span>검색어 필터 설정이 필요합니다</span>
                 </a>
+            </div>
+            <div class="flit-search-box">
+                <div class="head-box">
+                    <a href="#" class="close-btn"></a>
+                </div>
+                <div class="body-box"></div>
             </div>
         </div>
         <div class="menu-service-box box1">
@@ -482,7 +604,7 @@
             <div class="left">
                 <div class="add box"> <!-- 광고박스 -->
                     <a target="_blank" href="https://siape.veta.naver.com/fxclick?eu=EU10041888&calp=-&oj=A4YjrwVVtw8fsPrA6QtFfFnp0bemvv%2BINGJZ7y1jWZBGYV6e%2BSf9t5wr9P1Ol%2BDQBQ8s619ph%2FWp3PSpWl%2F9wQ&ac=8197913&src=4707496&br=3317169&evtcd=C1034&x_ti=1311&tb=&oid=&sid1=&sid2=&rk=5ca51076426b2d76f9315e8df6c8a6c1&eltts=UcYa57UK0tsErSqCGHQ7Pw%3D%3D&lu=&brs=Y&">
-                        <img src="https://ssl.pstatic.net/tveta/libs/1303/1303395/e125457cb278168acdf9_20201124162155433.jpg" alt="광고">
+                        <img src="https://ssl.pstatic.net/tveta/libs/1316/1316174/4f7f935c8bcf0bedebfd_20201216135730105.jpg" alt="광고">
                     </a>
                 </div>
                 <div class="issue-box"> <!-- 뉴스 헤드박스 -->
@@ -520,31 +642,31 @@
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/011.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/021.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/241.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/009.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/055.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
@@ -552,37 +674,37 @@
                     </div>
                     <div class="stand-row-box"> <!-- 한 행으로 묶어주는 박스 -->
                         <div class="stand-col-box"> <!-- 구독|기사보기 -->
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/079.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/539.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/812.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/961.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/040.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/826.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
@@ -590,37 +712,37 @@
                     </div>
                     <div class="stand-row-box"> <!-- 한 행으로 묶어주는 박스 -->
                         <div class="stand-col-box"> <!-- 구독|기사보기 -->
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/974.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/815.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/965.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/824.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/447.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/952.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
@@ -628,37 +750,37 @@
                     </div>
                     <div class="stand-row-box"> <!-- 한 행으로 묶어주는 박스 -->
                         <div class="stand-col-box"> <!-- 구독|기사보기 -->
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/943.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/969.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/913.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/958.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/353.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
                         </div>
                         <div class="stand-col-box">
-                            <img src="https://s.pstatic.net/static/newsstand/up/2020/0708/nsd94830278.png" alt="">
+                            <img src="https://s.pstatic.net/static/newsstand/2020/logo/light/0604/904.png" alt="">
                             <div class="thumb-box">
                                 <a href="#" class="btn-sub">구독</a><a href="#" class="btn-news">기사보기</a>
                             </div>
@@ -1165,77 +1287,77 @@
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201118_8/5eddfcb6-bef9-409c-adce-daa00978ca76.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">건조할때, 링티</span>
+                                                    <span>링티최대52%↓</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201215_14/4690a690-6ec5-4cbb-8694-e9a3889cc486.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">이원단이 좋은옷</span>
+                                                    <span>브랜드 그이상~</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201106_24/82ace5e9-6f97-4c47-8569-0126a09c0abe.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">알래스카에서쓰는</span>
+                                                    <span>영하40도방한장갑</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201216_19/8844fd88-1e41-4ff5-a263-2e0ebb522fb2.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">딱일주일 최대78%</span>
+                                                    <span>연말 특가 세일!</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201216_5/66902603-18ca-4f3e-91eb-0d1f65e315ad.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">파리바게트 CAKE</span>
+                                                    <span>20% 할인이야!</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201216_27/bae3ef9c-2afd-4715-9631-a7a90a64b781.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">14K/18K 최대~68%</span>
+                                                    <span>연말 마지막세일!</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201110_6/7935a793-ee9d-4fa2-9aa6-bda2cdd98faf.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">후기만 6만개!</span>
+                                                    <span>한정수량 2+1</span>
                                                 </p>
                                             </a>
                                         </li>

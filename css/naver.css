@@ -1526,6 +1526,39 @@ shop-box .shop-title{
     margin: 8px 5px 0 0;
     vertical-align: top;
 }
+.menu .flit-search-box{
+    position: absolute;
+    top: -1px;
+    right: 30px;
+    width: 601px;
+    height: 425px;
+    background-color: #fff;
+    z-index: 5;
+    box-shadow: 0 4px 6px 0 rgba(0,0,0,.12);
+    display: none;
+}
+.menu .flit-search-box .head-box{
+    height: 50px;
+    border: 1px solid #dae1e6;
+    border-width: 1px 0;
+    position: relative;
+}
+.menu .head-box .close-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.menu .head-box .close-btn::before{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    vertical-align: top;
+    content: '';
+    margin: 19px 18px;
+    background-image: url(https://s.pstatic.net/static/www/img/uit/2020/sp_main_1f05c0.png);
+    background-size: 440px 410px;
+    background-position: -420px -347px;
+}
 .menu .menu-service-box{
     background-color: #fff;
     height: 300px;
@@ -1678,8 +1711,21 @@ shop-box .shop-title{
     background-color: #f7f9fa;
     float: left;
 }
+.menu .empty-box .empty-menu.selected{
+    background-color: #fff;
+    color: #000;
+    border: none;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 30px;
+    width: auto;
+}
 .menu .empty-box .empty-menu+.empty-menu{
     margin-left: 8px;
+}
+.menu .empty-box .empty-menu.focus{
+    border-color: #19ce60;
+    background-color: #fff;
 }
 .theme-cont-box .top-box{
     padding: 22px 0 18px;
