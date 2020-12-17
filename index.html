@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/naver.css">
     <script src="js/jquery.js"></script>
     <script src="https://kit.fontawesome.com/372f53c69c.js" crossorigin="anonymous"></script>
+    <script src="js/rolling.js"></script>
     <script>
         $(function(){
             // 검색창에서 자동완성버튼을 클릭
@@ -104,7 +105,6 @@
                     //selectdMenuArr있는 내용을 토대로 block-menu-box내용 추가
                     $('.more-btn').click();
                     setBlackMenu(selectdMenuArr, baseMenuArr);
-
             })
             //초기화 버튼 클릭
             $('.btn-box .init-btn').click(function(e){
@@ -125,6 +125,7 @@
                 $('.flit-search-box').hide();
             })
         });
+
         var selectdMenuArr = [];        // 메뉴설정에서 메뉴들을 선택하고 저장했을 때 최종 결정된 메뉴
         var tmpMenuArr = [];            // 메뉴설정에서 메뉴들을 선택했을 때 저장된 메뉴
         const baseMenuArr = ['사전','뉴스','증권','부동산','영화','VIBE','책','웹툰'];
@@ -138,6 +139,7 @@
             '책' : '#4',
             '웹툰' : '#5'
         };
+
         function setMenuCheckbox(arr) {
             $('.service-data input').each(function(){
                 var text = $(this).parent().text().trim();
@@ -164,6 +166,7 @@
                 }
             })         
         }
+        
         function setBlackMenu(arr1, arr2){
             var arr;
             //선택된 메뉴가 없으면 ==> 사용자 설정 메뉴가 없으면
@@ -612,7 +615,14 @@
                         <a class="link-news" href="https://news.naver.com/main/list.nhn?mode=LPOD&mid=sec&sid1=001&sid2=140&oid=001&isYeonhapFlash=Y">
                             연합뉴스
                         </a>
-                        <div class="rollong-news"></div>
+                        <div class="rolling-news">
+                            <a href="#" class="news">가구당 빚 8천만원…30대·소득하위층 증가율 높아</a>
+                            <a href="#" class="news">내년 표준 단독주택 공시가 6.68% 오른다…서울은 10.13% '껑충'</a>
+                            <a href="#" class="news">전세난에 매매수요·갭투자 '꿈틀'…강남 아파트값 상승폭 커져</a>
+                            <a href="#" class="news">메디톡스·대웅 '보톡스 분쟁' 마무리 수순…상처만 남았다</a>
+                            <a href="#" class="news">법원, '20년 억울한 옥살이' 윤성여에 무죄 선고</a>
+                        </div>
+                            
                     </div>
                     <div class="right-box"> <!-- 오른쪽 네이버뉴스 연예 스포츠 경제 박스 -->
                         <a class="link-navernews" href="https://news.naver.com/">네이버뉴스</a>
@@ -1222,7 +1232,18 @@
                     </div>
                 </div>
                 <div class="timesquare-box box"> <!-- 로그인박스 밑  -->
-                    <div class="timesquare-cord"></div> <!-- 자동으로 넘어가는 부분 -->
+                    <div class="timesquare-card"> <!-- 자동으로 넘어가는 부분 -->
+                        <div class="timesquare-wrap">
+                            <div class="timesquare-rolling">
+                                <a href="#" class="card">aaaaa</a>
+                                <a href="#" class="card">bbbbb</a>
+                                <a href="#" class="card">ccccc</a>
+                                <a href="#" class="card">ddddd</a>
+                                <a href="#" class="card">eeeee</a>
+                                <a href="#" class="card">fffff</a>
+                            </div>
+                        </div>
+                    </div> 
                     <div class="btn-box">  <!-- 넘김버튼 -->
                         <a class="prev" href="#"></i></a>
                         <a class="next" href="#"></i></a>
