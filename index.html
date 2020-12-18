@@ -124,6 +124,44 @@
                 e.preventDefault();
                 $('.flit-search-box').hide();
             })
+            // 오늘 읽은만한 글 메뉴를 선택하면
+            $('.group-menu-list a').click(function(e){
+                e.preventDefault();
+                $('.group-menu-list a').removeClass('select');
+                $(this).addClass('select');
+                viewGroupMenuBtn();
+            })
+        
+            $('.group-menu .next').click(function(e){
+                e.preventDefault();
+                // 현재 선택된 메뉴가 메뉴리스트 마지막 메뉴면
+                if($('.group-menu .select').parents('ul').find('li').last().children().hasClass('select')){
+                    menuNum++;
+                    var ml = -751 * menuNum;
+                    $('.group-menu-list a').removeClass('select');
+                    $('.group-menu-list').eq(menuNum).children().first().children().addClass('select')
+                    $('.group-menu-wrap').first().animate({'margin-left':ml+'px'},500)
+                }else{
+                    $('.group-menu .select').parent().next().find('a').addClass('select');
+                    $('.group-menu .select').first().removeClass('select')
+                }
+                viewGroupMenuBtn();
+            })
+            $('.group-menu .prev').click(function(e){
+                e.preventDefault();
+                if($('.group-menu .select').parents('ul').find('li').first().children().hasClass('select')){
+                    menuNum--;
+                    var ml = -751 * menuNum;
+                    $('.group-menu-list a').removeClass('select');
+                    $('.group-menu-list').eq(menuNum).children().last().children().addClass('select')
+                    $('.group-menu-wrap').first().animate({'margin-left':ml+'px'},500)
+                }else{
+                    $('.group-menu .select').parent().prev().find('a').addClass('select');
+                    $('.group-menu .select').last().removeClass('select')
+                }
+                viewGroupMenuBtn();
+            })
+
         });
 
         var selectdMenuArr = [];        // 메뉴설정에서 메뉴들을 선택하고 저장했을 때 최종 결정된 메뉴
@@ -139,6 +177,8 @@
             '책' : '#4',
             '웹툰' : '#5'
         };
+
+        var menuNum = 0;
 
         function setMenuCheckbox(arr) {
             $('.service-data input').each(function(){
@@ -185,16 +225,31 @@
             }
             $('.black-menu-box').html(str);
         }
+
         function getpage(page,min,max){
             if(page < min)  return max;
             if(page > max)  return min;
             return page;
         }
+
         function foldBtn(){
             $('.menu .menu-service-box.box1').hide();
             $('.menu .menu-service-box.box2').hide();
             $('.empty-box').hide();
             $('.black-menu-box').show();
+        }
+
+        function viewGroupMenuBtn(){
+            if($('.group-menu-list:first li:first>a').hasClass('select')){
+                $('.group-menu .prev').hide();
+            }else{
+                $('.group-menu .prev').show();
+            }
+            if($('.group-menu-list:last li:last>a').hasClass('select')){
+                $('.group-menu .next').hide();
+            }else{
+                $('.group-menu .next').show();
+            }
         }
     </script>
 </head>
@@ -824,32 +879,91 @@
                             </div>
                         </div>
                         <div class="group-menu">
-                            <ul>
-                                <li>
-                                    <a href="#"class="enter">엔터</a>
-                                </li>
-                                <li>
-                                    <a href="#"class="sports select">스포츠</a>
-                                </li>
-                                <li>
-                                    <a href="#"class="car">자동차</a>
-                                </li>
-                                <li>
-                                    <a href="#"class="webtoon">웹툰</a>
-                                </li>
-                                <li>
-                                    <a href="#"class="finance">경제M</a>
-                                </li>
-                                <li>
-                                    <a href="#"class="food">푸드</a>
-                                </li>
-                                <li>
-                                    <a href="#"class="game">게임</a>
-                                </li>
-                                <li>
-                                    <a href="#"class="movie">영화</a>
-                                </li>
-                            </ul>
+                            <a href="#" class="prev"></a>
+                            <a href="#" class="next"></a>
+                            <div class="group-menu-view">
+                                <div class="group-menu-wrap after">
+                                    <ul class="after group-menu-list">
+                                        <li>
+                                            <a href="#"class="enter">엔터</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="sports select">스포츠</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="car">자동차</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="webtoon">웹툰</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="finance">경제M</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="food">푸드</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="game">게임</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="movie">영화</a>
+                                        </li>
+                                    </ul>
+                                    <ul class="after group-menu-list">
+                                        <li>
+                                            <a href="#"class="job">JOB&</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="tech">테크</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="traval">여행+</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="sci">과학</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="living">리빙</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="health">건강</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="business">비지니스</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="marry">연애·결혼</a>
+                                        </li>
+                                    </ul>
+                                    <ul class="after group-menu-list">
+                                        <li>
+                                            <a href="#"class="job">책문화</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="tech">부모i</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="traval">법률+</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="sci">패션뷰티</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="living">동물공감</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="health">디자인</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="business">중국</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"class="marry">FARM</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="theme-cont"></div>
@@ -921,83 +1035,33 @@
                             </div>
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201207_91%2F1607270872138Gs2j4_JPEG%2F13.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201218_111%2FxIiqv_16082597747265vMIR_PNG%2F1608259725317.png%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">01:14</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
+                                    <div class="category">구단특집</div>
+                                    <div class="title">[오피셜] 팀 척추라인의 핵심!, 김선민 영입</div>
+                                    <div class="source">서울 이랜드 FC</div>
                                     <div class="souece-right">2시간전</div>
                                 </a>
                             </div>
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201218_44%2FNEvW7_1608271316573wVOfO_JPEG%2F1608271270478.jpg%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">02:30</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row-box after">
-                            <div class="box">
-                                <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
-                                    <i class="play-ico"></i>
-                                    <span class="runtime-box">
-                                        <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
-                                </a>
-                            </div>
-                            <div class="box">
-                                <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201207_91%2F1607270872138Gs2j4_JPEG%2F13.jpg%22&type=nf464_260" alt="">
-                                    <i class="play-ico"></i>
-                                    <span class="runtime-box">
-                                        <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
-                                </a>
-                            </div>
-                            <div class="box">
-                                <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
-                                    <i class="play-ico"></i>
-                                    <span class="runtime-box">
-                                        <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
+                                    <div class="category">구단특집</div>
+                                    <div class="title">[#울산현대Live] 훈련 근황!(이벤트 있음)</div>
+                                    <div class="source">울산현대축구단</div>
                                     <div class="souece-right">2시간전</div>
                                 </a>
                             </div>
@@ -1005,50 +1069,100 @@
                         <div class="row-box after">
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201218_29%2F16082621539640FkX7_JPEG%2F20201218_kpga_RANK-3-%25C0%25CC%25C0%25E7%25B0%25E6_v1.3.mp4_20201218_122813.082.jpg%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">04:24</em>
+                                    </span>
+                                </a>
+                                <a href="#" class="info-box">
+                                    <div class="category">결산</div>
+                                    <div class="title">'준우승만 3회' KPGA 상금랭킹 TOP3 이재경</div>
+                                    <div class="source">KPGA 네이버스포츠</div>
+                                    <div class="souece-right">5시간전</div>
+                                </a>
+                            </div>
+                            <div class="box">
+                                <a href="#" class="thumb-box">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201218_285%2FCJ4rs_1608254731091Agkzu_JPEG%2F1608254727838.jpg%22&type=nf464_260" alt="">
+                                    <i class="play-ico"></i>
+                                    <span class="runtime-box">
+                                        <span class="runtime-bg"></span>
+                                        <em class="runtime">04:31</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
                                     <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
+                                    <div class="title">피는 못 속여.. 호랑이의 기운을 이어받은 찰리 우즈</div>
+                                    <div class="source">GOLFTV X PGA TOUR</div>
                                     <div class="souece-right">2시간전</div>
                                 </a>
                             </div>
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201207_91%2F1607270872138Gs2j4_JPEG%2F13.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201217_200%2FBl3iQ_1608196837153yM8q8_JPEG%2F1608196678372.jpg%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">12:53</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
+                                    <div class="category">핫클립</div>
+                                    <div class="title">'아니, 선수가 감독을 뽑아?' + 기영옥·조규성 단독비화</div>
+                                    <div class="source">볼만찬 기자들</div>
+                                    <div class="souece-right">23시간전</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row-box after">
+                            <div class="box">
+                                <a href="#" class="thumb-box">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2Fadmin%2Fcrop%2F1608255688402.jpg%22&type=nf464_260" alt="">
+                                    <!-- <i class="play-ico"></i>
+                                    <span class="runtime-box">
+                                        <span class="runtime-bg"></span>
+                                        <em class="runtime">03:55</em>
+                                    </span> -->
+                                </a>
+                                <a href="#" class="info-box">
+                                    <div class="category">네이버스포츠</div>
+                                    <div class="title">손흥민 선수 푸스카스 상 비하인드 신!</div>
+                                    <div class="source">네이버스포츠</div>
+                                    <div class="souece-right">7시간전</div>
                                 </a>
                             </div>
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201217_116%2FrQ0wt_1608208604595nsesA_JPEG%2F1608208299819.jpeg%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">16:47</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
+                                    <div class="category">핫클립</div>
+                                    <div class="title">차우찬, 우규민, 김재호 등 남은 9명 이적 가능성</div>
+                                    <div class="source">야구부장의 크보핵인싸</div>
+                                    <div class="souece-right">9시간전</div>
+                                </a>
+                            </div>
+                            <div class="box">
+                                <a href="#" class="thumb-box">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201218_142%2FSxSJS_1608249588651igBcs_JPEG%2F1608249459743.jpg%22&type=nf464_260" alt="">
+                                    <i class="play-ico"></i>
+                                    <span class="runtime-box">
+                                        <span class="runtime-bg"></span>
+                                        <em class="runtime">14:37</em>
+                                    </span>
+                                </a>
+                                <a href="#" class="info-box">
+                                    <div class="category">인터뷰</div>
+                                    <div class="title">"올시즌 모든 ‘If’가 다 터진 한 해" kt wiz 황재균 인터뷰</div>
+                                    <div class="source">이영미TV</div>
+                                    <div class="souece-right">8시간전</div>
                                 </a>
                             </div>
                         </div>
@@ -1057,134 +1171,134 @@
                         <div class="row-box after">
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201217_170%2FdT1kB_1608197288881NAWKm_JPEG%2F1608197217131.jpg%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">04:24</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
+                                    <div class="category">구단특집</div>
+                                    <div class="title">잘한 건 또 볼래요. 점보스 쭉쭉 올라갑니다!!</div>
+                                    <div class="source">대한항공 점보스</div>
+                                    <div class="souece-right">8시간전</div>
                                 </a>
                             </div>
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201207_91%2F1607270872138Gs2j4_JPEG%2F13.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201218_278%2F1608237239893VG4ys_JPEG%2F20201218_lpga_1r_n14.jpg%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">02:30</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
+                                    <div class="category">주요장면</div>
+                                    <div class="title">'6년이나 함께 했는데!' 김세영과 캐디 폴 포스코의 팀 호흡은?</div>
+                                    <div class="source">LPGA 네이버스포츠</div>
+                                    <div class="souece-right">11시간전</div>
                                 </a>
                             </div>
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201216_154%2FcpGpF_1608113929551G2w2Y_PNG%2F1608113029233.png%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">12:21</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row-box after">
-                            <div class="box">
-                                <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
-                                    <i class="play-ico"></i>
-                                    <span class="runtime-box">
-                                        <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
-                                </a>
-                            </div>
-                            <div class="box">
-                                <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201207_91%2F1607270872138Gs2j4_JPEG%2F13.jpg%22&type=nf464_260" alt="">
-                                    <i class="play-ico"></i>
-                                    <span class="runtime-box">
-                                        <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
-                                </a>
-                            </div>
-                            <div class="box">
-                                <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
-                                    <i class="play-ico"></i>
-                                    <span class="runtime-box">
-                                        <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="souece-right">2시간전</div>
+                                    <div class="category">구단특집</div>
+                                    <div class="title">제주 승격 다큐│U TURN  EP.1 : 6개월 겨울</div>
+                                    <div class="source">제주유나이티드FC - Jeju United FC</div>
+                                    <div class="souece-right">어제</div>
                                 </a>
                             </div>
                         </div>
                         <div class="row-box after">
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201207_244%2FdgWXZ_1607300284857K6djq_JPEG%2F1607300202262.jpg%22&type=nf464_260" alt="">
-                                    <i class="play-ico"></i>
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2Fadmin%2Fcrop%2F1607397486249.jpg%22&type=nf464_260" alt="">
+                                    <!-- <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
                                         <em class="runtime">03:55</em>
+                                    </span> -->
+                                </a>
+                                <a href="#" class="info-box">
+                                    <div class="category">네이버스포츠</div>
+                                    <div class="title">'드디어 터진 황의조 첫골'  H/L는 보르도TV에서</div>
+                                    <div class="source">네이버스포츠</div>
+                                    <div class="souece-right">1주일전</div>
+                                </a>
+                            </div>
+                            <div class="box">
+                                <a href="#" class="thumb-box">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201218_171%2F3q9yq_16082663459132n3JP_JPEG%2F1608266254962.jpg%22&type=nf464_260" alt="">
+                                    <i class="play-ico"></i>
+                                    <span class="runtime-box">
+                                        <span class="runtime-bg"></span>
+                                        <em class="runtime">08:48</em>
+                                    </span>
+                                </a>
+                                <a href="#" class="info-box">
+                                    <div class="category">핫클립</div>
+                                    <div class="title">손흥민‘푸스카스상’난리난 현지팬들,무리뉴가 수상소식 듣고 처음으로 한 말(ft.굴리트)</div>
+                                    <div class="source">김진짜 Real KIM</div>
+                                    <div class="souece-right">3시간전</div>
+                                </a>
+                            </div>
+                            <div class="box">
+                                <a href="#" class="thumb-box">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201218_135%2FIQdcl_1608269171784pWKgt_JPEG%2F1608269040172.jpeg%22&type=nf464_260" alt="">
+                                    <i class="play-ico"></i>
+                                    <span class="runtime-box">
+                                        <span class="runtime-bg"></span>
+                                        <em class="runtime">05:48</em>
+                                    </span>
+                                </a>
+                                <a href="#" class="info-box">
+                                    <div class="category">핫클립</div>
+                                    <div class="title">미란다, 계약 임박? 외국인 선수들의 보장액이 줄어드는 이유는? | DKTV</div>
+                                    <div class="source">DKTV</div>
+                                    <div class="souece-right">3시간전</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row-box after">
+                            <div class="box">
+                                <a href="#" class="thumb-box">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fphinf.pstatic.net%2Ftvcast%2F20201218_27%2FqZY1f_1608272671732iAgSi_JPEG%2F1608271259585.jpg%22&type=nf464_260" alt="">
+                                    <i class="play-ico"></i>
+                                    <span class="runtime-box">
+                                        <span class="runtime-bg"></span>
+                                        <em class="runtime">10:30</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">  
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
+                                    <div class="category">핫클립</div>
+                                    <div class="title">손흥민, 푸스카스상 수상!! 2020년 세계 1등 득점 이모저모 [방구석토크]</div>
+                                    <div class="source">손흥민, 푸스카스상 수상!! 2020년 세계 1등 득점 이모저모 [방구석토크]</div>
                                     <div class="souece-right">2시간전</div>
                                 </a>
                             </div>
                             <div class="box">
                                 <a href="#" class="thumb-box">
-                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201207_91%2F1607270872138Gs2j4_JPEG%2F13.jpg%22&type=nf464_260" alt="">
+                                    <img width="232" height="130" class="thumbnail" src="https://s.pstatic.net/dthumb.phinf/?src=%22https%3A%2F%2Fsports-phinf.pstatic.net%2F20201218_16%2F1608268530109c7VMx_JPEG%2F6.jpg%22&type=nf464_260" alt="">
                                     <i class="play-ico"></i>
                                     <span class="runtime-box">
                                         <span class="runtime-bg"></span>
-                                        <em class="runtime">03:55</em>
+                                        <em class="runtime">01:12:46</em>
                                     </span>
                                 </a>
                                 <a href="#" class="info-box">
-                                    <div class="category">특집영상</div>
-                                    <div class="title">여자농구에는 벤치를 지휘하는 마에스트로가 있다? ｜벤치에서 생긴일 : KB스타즈 편</div>
-                                    <div class="source">WKBL(한국여자농구연맹)</div>
-                                    <div class="source-right">2시간전</div>
+                                    <div class="category">다시보기</div>
+                                    <div class="title">5 vs 5 언더독의 반란 - PCS vs LCK 풀영상</div>
+                                    <div class="source">리그 오브 레전드 네이버스포츠</div>
+                                    <div class="source-right">2분전</div>
                                 </a>
                             </div>
                             <div class="box">
@@ -1250,6 +1364,7 @@
                     </div>
                 </div>
                 <div class="add2 box"> <!-- 광고박스 -->
+                    <img width="700" height="400" src="https://ssl.pstatic.net/tveta/libs/1315/1315202/1c25762baa2a3c72150f_20201216122525267.jpg" alt="">
                 </div> 
                 <div class="shop-box"> <!-- 트렌드 쇼핑-->
                     <div class="shop-header">
@@ -1385,44 +1500,44 @@
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201218_15/c5ce44a3-db3d-42c3-86e0-79e8eee42527.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">꿀이듬뿍고구마~</span>
+                                                    <span>10kg2만원대!</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201208_28/1cf0c020-30ec-4a17-9828-c6d48977b957.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">입에서 살살녹아!</span>
+                                                    <span>64%세일 쟁여둬~</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201203_16/05527991-4b1a-49a1-8fef-72226d22ead8.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">밤낮바뀌었어?</span>
+                                                    <span>이거한잔 마셔봐!</span>
                                                 </p>
                                             </a>
                                         </li>
                                         <li class="goods-item">
                                             <a href="#">
                                                 <div class="thumb-box">
-                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20201130_20/ffdb700b-8fa5-4455-ba5f-710d00622907.jpg?type=f214_292" alt="">
+                                                    <img height="146" src="https://s.pstatic.net/shopping.phinf/20200827_8/b3a46929-3f03-480f-8e7d-45578b14029f.jpg?type=f214_292" alt="">
                                                 </div>
                                                 <p class="thumb-title">
-                                                    <span class="bold">이런게 있었다니?</span>
-                                                    <span>역대급 최고반응!</span>
+                                                    <span class="bold">빈틈없이 꽉찼다!</span>
+                                                    <span>포만감 풀충전!</span>
                                                 </p>
                                             </a>
                                         </li>
